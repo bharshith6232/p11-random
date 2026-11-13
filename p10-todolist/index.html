@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Responsive To-Do List</title>
+<style>
+*{box-sizing:border-box}
+body{background-color:#a79277;font-family:"Poppins",sans-serif;margin:0;padding:0;display:flex;flex-direction:column;align-items:center;min-height:100vh}
+.container{margin-top:50px;background-color:#d1bb9e;padding:25px;border-radius:10px;box-shadow:0 4px 10px rgba(0,0,0,.2);width:90%;max-width:400px}
+h1{text-align:center;color:#372c0b;margin-bottom:20px}
+.input-area{display:flex;justify-content:space-between;align-items:center}
+input[type="text"]{flex:1;border-radius:5px;border:none;padding:8px 10px;color:#a79277;outline:none;font-size:16px}
+button{border:none;border-radius:5px;background-color:#fff2e1;color:#a79277;font-weight:bold;margin-left:8px;padding:8px 15px;cursor:pointer;transition:.3s}
+button:hover{background-color:#ead8c0}
+.tasks{margin-top:20px;display:flex;flex-direction:column;gap:10px}
+.li{background-color:#ead8c0;display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;color:#372c0b;font-size:16px;word-break:break-word}
+.d2{display:flex;align-items:center;gap:10px}
+.i2[type="checkbox"]{width:22px;height:22px;accent-color:#a79277}
+.empty{text-align:center;color:#fff2e1;font-size:14px;margin-top:10px}
+@media(max-width:600px){.container{margin-top:30px;padding:20px;width:90%}h1{font-size:22px}input[type="text"]{font-size:14px}button{font-size:14px;padding:7px 12px}.li{font-size:14px;flex-direction:column;align-items:flex-start;gap:8px}.d2{width:100%;justify-content:flex-end}}
+</style>
+</head>
+<body>
+<div class="container">
+<h1>📝 To-Do List</h1>
+<div class="input-area"><input type="text" placeholder="Enter a task..." id="v" /><button id="add">ADD</button></div>
+<div id="tasks" class="tasks"></div>
+</div>
+<script>
+const tasksContainer=document.getElementById("tasks");
+const addBtn=document.getElementById("add");
+const inputBox=document.getElementById("v");
+let tasks=JSON.parse(localStorage.getItem("tasks"))||[];
+renderTasks();
+addBtn.addEventListener("click",addTask);
+inputBox.addEventListener("keypress",(e)=>{if(e.key==="Enter")addTask()});
+function addTask(){const text=inputBox.value.trim();if(text==="")return;tasks.push({text,completed:false});saveTasks();renderTasks();inputBox.value=""}
+function renderTasks(){
+tasksContainer.innerHTML="";
+if(tasks.length===0){const msg=document.createElement("p");msg.classList.add("empty");msg.textContent="No tasks yet. Add one!";tasksContainer.appendChild(msg);return}
+tasks.forEach((task,index)=>{
+const li=document.createElement("li");li.classList.add("li");li.style.textDecoration=task.completed?"line-through":"none";
+const textNode=document.createElement("span");textNode.textContent=task.text;
+const d2=document.createElement("div");d2.classList.add("d2");
+const checkbox=document.createElement("input");checkbox.type="checkbox";checkbox.checked=task.completed;checkbox.classList.add("i2");
+checkbox.addEventListener("change",()=>{task.completed=checkbox.checked;saveTasks();renderTasks()});
+const delBtn=document.createElement("button");delBtn.textContent="X";
+delBtn.addEventListener("click",()=>{tasks.splice(index,1);saveTasks();renderTasks()});
+d2.appendChild(checkbox);d2.appendChild(delBtn);li.appendChild(textNode);li.appendChild(d2);tasksContainer.appendChild(li);
+});
+}
+function saveTasks(){localStorage.setItem("tasks",JSON.stringify(tasks))}
+</script>
+</body>
+</html>
