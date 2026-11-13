@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <style>
+    .b1{width:100px;height:30px;margin-top:10px;background-color:#61C0BF;color:#FAE3D9}
+    .b2{width:70px;height:30px;background-color:#61C0BF;color:#FAE3D9}
+    body{background-color:#FFB6B9;height:100vh;display:flex;width:200vh;justify-content:space-around}
+    h1{color:#61C0BF;width:150px}
+    input{width:200px;height:25px;border-width:0;border-radius:3px;color:#61C0BF}
+    button{border-radius:4px;border-width:0;height:25px}
+    .a{height:70%;display:flex;flex-direction:column;justify-content:center;align-items:center;background-color:#FAE3D9;margin-top:auto;margin-bottom:auto;border-radius:8px}
+    .b{height:70%;width:400px;display:flex;flex-direction:column;justify-content:center;align-items:center;background-color:#FAE3D9;margin-top:auto;margin-bottom:auto;border-radius:8px}
+    .si{width:200px;height:25px}
+    .di{width:400px;display:flex;align-items:center;justify-content:space-around}
+    .listname{width:100%;margin-left:30%}
+  </style>
+</head>
+<body>
+  <div class="a">
+    <div>
+      <div class="di"><h1>firstname</h1><input id="firstname" type="text" /></div>
+      <div class="di"><h1>lastname</h1><input id="lastname" type="text" /></div>
+      <div class="di"><h1>email</h1><input id="email" type="email" /></div>
+      <div class="di"><h1>password</h1><input id="password" type="password" /></div>
+    </div>
+    <button id="add" class="b1">add</button>
+  </div>
+  <div class="b">
+    <div><input id="i" type="text" class="si"/><button id="b2" class="b2">search</button></div>
+    <div class="listname">
+      <h1 id="fn">firstName</h1><h1 id="ln">lastname</h1><h1 id="em">email</h1><h1 id="pass">password</h1>
+    </div>
+  </div>
+</body>
+<script>
+  const add = addEventListener("click", () => {
+    const firstname = document.getElementById("firstname");
+    const lastname = document.getElementById("lastname");
+    const password = document.getElementById("password");
+    const email = document.getElementById("email");
+    const user = { firstname:firstname.value, lastname:lastname.value, email:email.value, password:password.value };
+    localStorage.setItem(`${firstname.value}`, JSON.stringify(user));
+    firstname.value = ""; lastname.value = ""; email.value = ""; password.value = "";
+  });
+  const b2 = document.getElementById("b2");
+  b2.addEventListener("click", () => {
+    const i = document.getElementById("i").value;
+    const result = JSON.parse(localStorage.getItem(`${i}`));
+    console.log(result);
+    document.getElementById("fn").textContent = result.firstname;
+    document.getElementById("ln").textContent = result.lastname;
+    document.getElementById("em").textContent = result.email;
+    document.getElementById("pass").textContent = result.password;
+  });
+  const result1 = localStorage.getItem("joy");
+  console.log(result1);
+</script>
+</html>
